@@ -26,20 +26,20 @@ const checkSLAViolations = async () => {
       const hoursSinceCreation = (now - createdAt) / (1000 * 60 * 60);
 
       // Check response time violation
-      if (ticket.status === 'open' && hoursSinceCreation > ticket.sla.responseTime) {
+      if (ticket.status === 'open' && hoursSinceCreation > ticket.sla.responseTimeHours) {
         violations.push({
           ticket,
           type: 'response_time',
-          hoursOverdue: hoursSinceCreation - ticket.sla.responseTime
+          hoursOverdue: hoursSinceCreation - ticket.sla.responseTimeHours
         });
       }
 
       // Check resolution time violation
-      if (hoursSinceCreation > ticket.sla.resolutionTime) {
+      if (hoursSinceCreation > ticket.sla.resolutionTimeHours) {
         violations.push({
           ticket,
           type: 'resolution_time',
-          hoursOverdue: hoursSinceCreation - ticket.sla.resolutionTime
+          hoursOverdue: hoursSinceCreation - ticket.sla.resolutionTimeHours
         });
       }
     }

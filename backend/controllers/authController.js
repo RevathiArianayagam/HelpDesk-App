@@ -11,9 +11,27 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Only allow admin to create admin/agent users
-    if (role && role !== 'user' && (!req.user || req.user.role !== 'admin')) {
-      return res.status(403).json({ message: 'Only admins can create admin/agent users' });
+    // Only allow superadmin to create superadmin, admin to create admin/agent, manager/agent to register as user
+    if (role && role !== 'user') {
+      if (!req.user) {
+        return res.status(403).json({ message: 'Authentication required to create privileged users' });
+      }
+      // Only superadmin can create superadmin
+      if (role === 'superadmin' && req.user.role !== 'superadmin') {
+        return res.status(403).json({ message: 'Only superadmins can create superadmin users' });
+      }
+      // Only superadmin and admin can create other roles
+      if (['admin', 'manager', 'agent'].includes(role)) {
+        if (req.user.role === 'superadmin') {
+          // SuperAdmin can create any role
+          // allowed
+        } else if (req.user.role === 'admin' && ['manager', 'agent'].includes(role)) {
+          // Admin can only create agent and manager, not admin
+          // allowed
+        } else {
+          return res.status(403).json({ message: 'Insufficient permissions to create this user role' });
+        }
+      }
     }
 
     const user = await User.create({

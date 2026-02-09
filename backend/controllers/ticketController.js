@@ -97,7 +97,7 @@ const createTicket = async (req, res) => {
     let dueDate = null;
     if (sla) {
       dueDate = new Date();
-      dueDate.setHours(dueDate.getHours() + sla.resolutionTime);
+      dueDate.setHours(dueDate.getHours() + sla.resolutionTimeHours);
     }
 
     const ticket = await Ticket.create({

@@ -15,12 +15,12 @@ const SLA = sequelize.define('SLA', {
     type: DataTypes.ENUM('low', 'medium', 'high', 'urgent'),
     allowNull: false
   },
-  responseTime: {
+  responseTimeHours: {
     type: DataTypes.INTEGER,
     allowNull: false,
     comment: 'Response time in hours'
   },
-  resolutionTime: {
+  resolutionTimeHours: {
     type: DataTypes.INTEGER,
     allowNull: false,
     comment: 'Resolution time in hours'

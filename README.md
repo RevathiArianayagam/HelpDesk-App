@@ -4,10 +4,10 @@ A production-ready full-stack helpdesk ticket management system with role-based 
 
 ## Features
 
-- **User Authentication**: JWT-based authentication with three roles (Admin, Agent, User)
+- **User Authentication**: JWT-based authentication with three roles (Admin, Agent, User,superadmin,manager)
 - **Ticket Management**: Create, assign, and track tickets with status updates
 - **SLA Escalation**: Automatic escalation based on SLA rules
-- **Email Notifications**: Automated email notifications for ticket updates
+- ** Notifications**: Automated inapp notifications for ticket updates
 - **File Upload**: Support for file attachments on tickets
 - **Admin Dashboard**: Comprehensive metrics and analytics
 - **Role-Based Access**: Different UI and permissions based on user role
@@ -26,9 +26,9 @@ A production-ready full-stack helpdesk ticket management system with role-based 
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- MySQL (v5.7 or higher)
-- npm or yarn
+- Node.js 
+- MySQL
+- npm 
 
 ### Installation
 

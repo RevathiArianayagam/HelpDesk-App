@@ -7,6 +7,8 @@ const { sequelize, initializeDatabase } = require('./config/database');
 const authRoutes = require('./routes/auth');
 const ticketRoutes = require('./routes/tickets');
 const adminRoutes = require('./routes/admin');
+const managerRoutes = require('./routes/manager');
+const superadminRoutes = require('./routes/superadmin');
 const notificationRoutes = require('./routes/notifications');
 const { initializeDefaultUsers, initializeDefaultSLAs } = require('./utils/seedData');
 require('./utils/createUploadsDir'); // Ensure uploads directory exists
@@ -25,6 +27,8 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/manager', managerRoutes);
+app.use('/api/superadmin', superadminRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // Health check
@@ -46,14 +50,16 @@ const PORT = process.env.PORT || 5000;
 // Initialize database and start server
 initializeDatabase()
   .then(() => {
+    console.log('Authenticating with database...');
     return sequelize.authenticate();
   })
   .then(() => {
-    console.log('Database connection established successfully.');
+    console.log('[OK] Database connection established successfully.');
+    console.log('Syncing database models...');
     return sequelize.sync({ alter: true });
   })
   .then(() => {
-    console.log('Database models synchronized.');
+    console.log('[OK] Database models synchronized.');
     return initializeDefaultUsers();
   })
   .then(() => {
@@ -61,11 +67,19 @@ initializeDatabase()
   })
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`[SERVER] Server is running on port ${PORT}`);
+      console.log(`[API] http://localhost:${PORT}/api`);
+      console.log(`[DATABASE] ${process.env.DB_NAME || 'helpdesk_db'}`);
+      console.log('');
+      console.log('[CREDENTIALS] Default Login Accounts:');
+      console.log('   SuperAdmin:  superadmin@helpdesk.com / superadmin123');
+      console.log('   Admin:       admin@helpdesk.com / admin123');
+      console.log('   Manager:     manager@helpdesk.com / manager123');
+      console.log('');
     });
   })
   .catch((error) => {
-    console.error('Unable to connect to the database:', error);
+    console.error('[ERROR] Unable to connect to the database:', error.message);
     process.exit(1);
   });
 
